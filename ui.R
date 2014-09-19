@@ -1,14 +1,16 @@
-## read in the data and create the factors needed for ggplot
+## read in the data and create the input selector choices
 data <- read.csv("CDN-NHS-2011-Migration.csv", header = TRUE, stringsAsFactors=FALSE)
-data$Age.Group <- factor(data$Age.Group)
-data$Mobility.Years <- factor(data$Mobility.Years)
-
-## create the input selector choices
+## put the areas in alphabetical order
 area.choices <- unique(data$Area[order(data$Area)])
 names(area.choices) <- area.choices
+## the first two variables are not selectable since they are always
+## represented in the same way on the migration data plot
 variable.choices <- colnames(data)[-c(1:3)]
 names(variable.choices) <- sub("-"," ", gsub("\\.","-",variable.choices))
 
+library(shiny)
+## create the two tab Shiny User Interface 
+## (the first tab is the app the second is the doc)
 shinyUI(navbarPage("Canadian Young Person Migration",
     tabPanel("Application",
         pageWithSidebar(
